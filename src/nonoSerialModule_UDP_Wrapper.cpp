@@ -194,7 +194,7 @@ void processUDPData( ssize_t res, unsigned char* buf ){
             // printf("Remote Frame. (%i)\n",(int)res);
 
             memcpy(dataBuffer,buf+1,HGC_AMOUNT_LCDS_TOTAL);
-            
+
           }
           break;
 
@@ -321,7 +321,7 @@ void loop(){
     
 
 
-    serialModule.update();
+    serialModule.testSendToSerial( frameCnt%200 );
 
   }
 

@@ -63,7 +63,7 @@ void nonoSerialModule::setup(){
 
 #endif
 
-  for( int i=0;i<deviceNames.size();i++){
+  for( int i=0;i<(int)deviceNames.size();i++){
     serialDevices.push_back( Serial() );
     int fd = serialDevices.back().openPort (deviceNames[i].c_str(), (int)HGC_SERIAL_BAUDRATE);
     if ( fd < 0){
@@ -87,7 +87,7 @@ void nonoSerialModule::setup(){
 
 void nonoSerialModule::close(){
 
-  for( int i=0;i<serialDevices.size();i++){
+  for( int i=0;i<(int)serialDevices.size();i++){
     serialDevices[i].closePort();
   }
   printf("\nShutting down and sending a dark frame.\n");
@@ -189,7 +189,7 @@ bool nonoSerialModule::testSendToSerial( unsigned char value ){
 // ------------------------------------------------------------------------
 // Loop
 //
-
+/*
 void nonoSerialModule::update(){
 
   // dataBuffer[0] = 0xff;
@@ -202,28 +202,6 @@ void nonoSerialModule::update(){
 
 
   // unsigned long tStart = millis();
-/*
-  serialDevice1BufferSize = readSerialSignal( serialDevice1, serialDevice1Buffer, serialDevice1BufferSize );
-  if( serialDevice1BufferSize > 0 ){
-    if( f_settings_sensor_enabled ){
-      serialDevice1BufferSize = processSerialData( serialDevice1Buffer, serialDevice1BufferSize, sensorBufferFront, panelToPixelFront );
-    }else{
-      serialDevice1BufferSize = 0;
-    }
-    // sendUDPMessageFront( serialDevice1Buffer, len );
-  }
-
-
-  serialDevice2BufferSize = readSerialSignal( serialDevice2, serialDevice2Buffer, serialDevice2BufferSize );
-  if( serialDevice2BufferSize > 0 ){
-    if( b_settings_sensor_enabled ){
-      serialDevice2BufferSize = processSerialData( serialDevice2Buffer, serialDevice2BufferSize, sensorBufferBack, panelToPixelBack );
-    }else{
-      serialDevice2BufferSize = 0;
-    }
-    // sendUDPMessageBack( serialDevice2Buffer, len );
-  }
-*/
 
 
     int res;
@@ -238,15 +216,18 @@ void nonoSerialModule::update(){
     // res = serialDevices[0].writeBytes( serialBuffer, len );
     // printf("SERIAL SENT : %i/%i    fd:%u   %s\n",res,len,serialDevices[0].getSerialFD(), serialDevices[0].getDeviceName());
 
-    for( int i=0;i<serialDevices.size();i++){
+    for( int i=0;i<(int)serialDevices.size();i++){
       res = serialDevices[i].writeBytes( dataBuffer, len );
       // res = write( 5, serialBuffer, len );
       if( res != len ){
         printf("ERROR %i SERIAL SENT : %i/%i    fd:%u   %s\n",i,res,len,serialDevices[i].getSerialFD(), serialDevices[i].getDeviceName().c_str());
+      }else{
+        printf("loop. frame:%i   data sent:%i\n",frameCnt,res);
       }
     }
     
-    printf("loop. frame:%i   data sent:%i\n",frameCnt,res);
     frameCnt++;
 
 }
+
+*/
