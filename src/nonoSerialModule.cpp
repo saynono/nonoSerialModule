@@ -139,13 +139,16 @@ bool nonoSerialModule::sendDataToSerial( Serial* serial, unsigned char* data, in
 
 
 
-bool nonoSerialModule::testSendToSerial( unsigned char value ){
+bool nonoSerialModule::testSendToSerial( int val ){
   Serial* serial = &serialDevices[0];
   // printf("-------------- TEST DATA FOR SERIAL (%s) -------------- ", serial->getDeviceName().c_str());
   int l = SERIAL_DATA_BUFFER_SIZE;
-  memset(dataBuffer,value,l);
+  memset(dataBuffer,0,l);
   dataBuffer[0] = 0xff;
   dataBuffer[1] = 0x00;
+  for( int i=2;i<l;i++ ){
+    dataBuffer[i] = (int)(((sin((i+val)/100.0) + 1) / 2.0) * 0xf1) & 0xff;
+  }
 
   return sendDataToSerial( serial, dataBuffer, l );
 }

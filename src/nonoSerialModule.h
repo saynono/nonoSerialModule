@@ -45,7 +45,7 @@ public:
   // bool sendDataToSplitter( Serial* serial, int splitterID, int panelCnt );
   // void update();
 
-  bool testSendToSerial( unsigned char value );
+  bool testSendToSerial( int val );
 
 private:
 
