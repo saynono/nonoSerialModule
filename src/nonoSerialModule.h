@@ -43,13 +43,12 @@ public:
   nonoSerialModule();
   void setup();
   void close();
-  bool sendCompleteData( unsigned char* data );  
-  bool sendDataToSide( Serial* serial, unsigned char* data, HGC_COLUMN_SIDES side );
+  
+  bool sendDataToSerial( Serial* serial, unsigned char* data );
   bool sendDataToSplitter( Serial* serial, int splitterID, int panelCnt );
   void update();
 
-  bool testSendToSplitter( unsigned char value, int splitterID=1, int panelCnt=6 );
-  bool testSendToSide( unsigned char value, int side=0 );
+  bool testSendToSerial( unsigned char value );
 
 private:
 

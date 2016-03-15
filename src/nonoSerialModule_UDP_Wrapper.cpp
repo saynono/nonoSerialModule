@@ -194,16 +194,7 @@ void processUDPData( ssize_t res, unsigned char* buf ){
             // printf("Remote Frame. (%i)\n",(int)res);
 
             memcpy(dataBuffer,buf+1,HGC_AMOUNT_LCDS_TOTAL);
-            // bool success = serialModule.sendCompleteData(buf+1);
-            // for( int i=0;i<10;i++){
-            //   printf("%02X ",dataBuffer[i]);
-            // }
-            // printf("\n");
-            bool success = serialModule.sendCompleteData(dataBuffer);
-            if( !success ){
-              printf("Serial: Couldn't send entire data set.");
-            }
-
+            
           }
           break;
 
@@ -321,10 +312,10 @@ void loop(){
         // dataBuffer[i] = i == frameC ? 0xff : 0;
       }
       // memset(dataBuffer,val,HGC_AMOUNT_LCDS_TOTAL);
-      bool success = serialModule.sendCompleteData(dataBuffer);
-      if( !success ){
-        printf("Serial: Couldn't send entire data set.");
-      }
+      // bool success = serialModule.sendCompleteData(dataBuffer);
+      // if( !success ){
+      //   printf("Serial: Couldn't send entire data set.");
+      // }
 
     }
     
