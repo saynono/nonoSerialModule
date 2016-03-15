@@ -16,10 +16,7 @@
 // #define HGC_SERIAL_BAUDRATE           115200
 
 // #define HGC_SERIAL_DEVICE_CNT         1
-#define HGC_SERIAL_BUFFER_SIZE        2048
-#define HGC_SERIAL_HEADER             0xC5
-#define HGC_SERIAL_HEADER_LENGTH      10
-#define HGC_SERIAL_BYTER_PER_SPLITTER_PORT 31
+#define SERIAL_DATA_BUFFER_SIZE       2048
 
 
 namespace nono
@@ -44,16 +41,16 @@ public:
   void setup();
   void close();
   
-  bool sendDataToSerial( Serial* serial, unsigned char* data );
-  bool sendDataToSplitter( Serial* serial, int splitterID, int panelCnt );
+  bool sendDataToSerial( Serial* serial, unsigned char* data, int size );
+  // bool sendDataToSplitter( Serial* serial, int splitterID, int panelCnt );
   // void update();
 
   bool testSendToSerial( unsigned char value );
 
 private:
 
-  unsigned char dataBuffer[HGC_AMOUNT_LCDS_TOTAL];
-  unsigned char serialBuffer[HGC_SERIAL_BUFFER_SIZE];
+  unsigned char dataBuffer[SERIAL_DATA_BUFFER_SIZE];
+  unsigned char serialBuffer[SERIAL_DATA_BUFFER_SIZE];
   // Serial serialDevices[HGC_SERIAL_DEVICE_CNT];
 
   std::vector<Serial> serialDevices;

@@ -35,8 +35,8 @@ using namespace nono::com;
 
 
 nonoSerialModule::nonoSerialModule(){
-  memset(serialBuffer,0,HGC_SERIAL_BUFFER_SIZE);
-  memset(dataBuffer,0,HGC_AMOUNT_LCDS_TOTAL);
+  memset(serialBuffer,0,SERIAL_DATA_BUFFER_SIZE);
+  memset(dataBuffer,0,SERIAL_DATA_BUFFER_SIZE);
   frameCnt = 0;
 }
 
@@ -59,7 +59,7 @@ void nonoSerialModule::setup(){
 
 #elif __APPLE__
 
-  deviceNames.push_back("/dev/tty.usbserial-FTYXQU1DA");
+  deviceNames.push_back("/dev/tty.usbserial-FTYSF3GQ");
 
 #endif
 
@@ -94,11 +94,11 @@ void nonoSerialModule::close(){
 
 }
 
-bool nonoSerialModule::sendDataToSerial( Serial* serial, unsigned char* data ){
+bool nonoSerialModule::sendDataToSerial( Serial* serial, unsigned char* data, int size ){
     
-    bool res = true;
-    memset( serialBuffer, 0, HGC_SERIAL_BUFFER_SIZE);
-
+    // bool res = true;
+    // memset( serialBuffer, 0, SERIAL_DATA_BUFFER_SIZE);
+/*
     // ModelDefinitions::ColumnSide* sideModel = &ModelDefinitions::allColumns.sides[ serial.side ];
 
     // int cnt = 0;
@@ -128,57 +128,26 @@ bool nonoSerialModule::sendDataToSerial( Serial* serial, unsigned char* data ){
         }
 
     }
-    
+    */
 //    serial.serial->writeBytes(buffer, cnt);
-    return res;
+
+  int res = serial->writeBytes(data, size);
+  return res == size;
+
+    // return res;
 }
 
 
-
-bool nonoSerialModule::sendDataToSplitter( Serial* serial, int splitterID, int panelCnt ){
-    // printf("-------------- DATA FOR SPLITTER %i (%s) -------------- ", splitterID,serial->getDeviceName().c_str());
-    int cnt=0;
-    int dataLength = panelCnt * HGC_SERIAL_BYTER_PER_SPLITTER_PORT + 5;
-    serialBuffer[cnt++] = HGC_SERIAL_HEADER;          // HEADER
-    serialBuffer[cnt++] = dataLength & 0xff;          // PACKET LENGTH LOW
-    serialBuffer[cnt++] = (dataLength>>8) & 0xff;     // PACKET LENGTH HIGH
-    serialBuffer[cnt++] = splitterID;                 // Splitter ID
-    serialBuffer[cnt++] = 0x01;                       // Command
-    serialBuffer[cnt++] = panelCnt;                   // Panels count == port per splitter
-    serialBuffer[cnt++] = HGC_SERIAL_BYTER_PER_SPLITTER_PORT & 0xff;        // bytes LOW => 30 LCDs + 1 divider
-    serialBuffer[cnt++] = (HGC_SERIAL_BYTER_PER_SPLITTER_PORT>>8)&0xff;     // bytes HI <nbytes> is the number of bytes to send to each ports. For the LCD application this is 31 decimal (00+15 nodes x2 LCDs per node)
-    serialBuffer[cnt++] = 0x00;                       // <mask> In conjunction with <nports=0> this selects a single port only instead of all ports. Only useful for test/programming.
-    serialBuffer[cnt++] = 0x00;                       // <format> This should be 0 for the format used by the LCD nodes. (125kbaud, break to start)
-    
-    
-//    for( int i=0;i<dataLength+HGC_SERIAL_HEADER_LENGTH-5;i++ ){
-//        printf(" %02i",buffer[i]);
-//    }
-//    cout << std::endl;
-    int len = dataLength+HGC_SERIAL_HEADER_LENGTH-5;
-    int res = serial->writeBytes( serialBuffer, len);
-    serial->flush();
-//    int res = serial->writeBytes( buffer, HGC_SERIAL_MAX_BUFFER_SIZE);
-    // if( serial->isConnected() ){
-    //   printf(" --------> DATA PACKET FOR SPLITTER   ID=%i P_COUNT=%i   - (%i,%i) <-----------\n",splitterID, panelCnt, res,len);
-    //   printHex(serialBuffer, len);
-    // }
-
-    // if( res == len ){
-    //   printf("OK. (%i/%i)\n",res,len);
-    // }else{
-    //   printf("FAILED. (%i/%i)\n",res,len);
-    // }
-    return res == len;
-}
 
 bool nonoSerialModule::testSendToSerial( unsigned char value ){
   Serial* serial = &serialDevices[0];
   // printf("-------------- TEST DATA FOR SERIAL (%s) -------------- ", serial->getDeviceName().c_str());
-  memset(dataBuffer,value,HGC_AMOUNT_LCDS_PER_COLUMN);
+  int l = SERIAL_DATA_BUFFER_SIZE;
+  memset(dataBuffer,value,l);
   dataBuffer[0] = 0xff;
   dataBuffer[1] = 0x00;
-  return sendDataToSerial( serial, dataBuffer );
+
+  return sendDataToSerial( serial, dataBuffer, l );
 }
 
 

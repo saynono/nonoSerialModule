@@ -215,9 +215,9 @@ int Serial::openPort (const char *device, const int baud)
     int res = setCustomBaudrate(fd,baud);
     if( res == 0 ){
       myBaud = baud;
-      printf("SUCCESS: Altered baudrate to %i.",baud);
+      printf("SUCCESS: Altered baudrate to %i.\n",baud);
     }else{
-      printf("ERROR: Couldn't set baudrate to custom value %i.",baud);
+      printf("ERROR: Couldn't set baudrate to custom value %i.\n",baud);
     }
 
   }
