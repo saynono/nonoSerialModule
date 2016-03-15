@@ -214,6 +214,15 @@ int Serial::openPort (const char *device, const int baud)
   
   // On OS X, starting in Tiger, we can set a custom baud rate, as follows:
 
+  if ((int) cfgetospeed(&options) != baud) {
+
+    int res = setCustomBaudrate(fd,baud);
+    if( res == 0 ){
+      myBaud = baud;
+    }
+
+  }
+/*
 #ifdef __APPLE__  
   if ((int) cfgetospeed(&options) != baud) {
     speed_t speed = baud;
@@ -225,8 +234,8 @@ int Serial::openPort (const char *device, const int baud)
     }
   }
 #endif
+*/
 
-  // printf("Output baud rate changed to %d\n", (int) myBaud);
 #ifdef __APPLE__
   unsigned long mics = 1UL;
   int success = ioctl(fd, IOSSDATALAT, &mics);
@@ -244,6 +253,82 @@ int Serial::openPort (const char *device, const int baud)
   usleep (10000) ;	// 10mS
 
   return fd ;
+}
+
+
+
+
+
+int Serial::setBaudrate(int fd, speed_t baudrate) {
+  int rc;
+  struct termios tio;
+
+  rc = tcgetattr(fd, &tio);
+  if (rc < 0) {
+    printf("ERROR: tcgetattr()\n");
+    return -errno;
+  }
+  cfsetispeed(&tio, baudrate);
+  cfsetospeed(&tio, baudrate);
+
+  rc = tcsetattr(fd, TCSANOW, &tio);
+  if (rc < 0) {
+    printf("ERROR: tcgetattr()\n");
+    return -errno;
+  }
+
+  return 0;
+}
+
+
+// This part is taken from here: http://cgit.osmocom.org/osmocom-bb/plain/src/shared/libosmocore/src/serial.c
+
+/*! \brief Change current baudrate to a custom one using OS specific method
+ *  \param[in] fd File descriptor of the open device
+ *  \param[in] baudrate Baudrate as integer
+ *  \returns 0 for success or negative errno.
+ *
+ *  This function might not work on all OS or with all type of serial adapters
+ */
+
+int Serial::setCustomBaudrate(int fd, speed_t baudrate) {
+#ifdef __linux__
+  int rc;
+  struct serial_struct ser_info;
+
+  rc = ioctl(fd, TIOCGSERIAL, &ser_info);
+  if (rc < 0) {
+    printf("ERROR: ioctl(TIOCGSERIAL)\n");
+    return -errno;
+  }
+
+  ser_info.flags = ASYNC_SPD_CUST | ASYNC_LOW_LATENCY;
+  ser_info.custom_divisor = ser_info.baud_base / baudrate;
+
+  rc = ioctl(fd, TIOCSSERIAL, &ser_info);
+  if (rc < 0) {
+    printf("ERROR: ioctl(TIOCSSERIAL)\n");
+    return -errno;
+  }
+
+  return setBaudrate(fd, B38400); /* 38400 is a kind of magic ... */
+#elif defined(__APPLE__)
+#ifndef IOSSIOSPEED
+#define IOSSIOSPEED    _IOW('T', 2, speed_t)
+#endif
+  int rc;
+
+  unsigned int speed = baudrate;
+  rc = ioctl(fd, IOSSIOSPEED, &speed);
+  if (rc < 0) {
+    printf("ERROR: ioctl(IOSSIOSPEED)\n");
+    return -errno;
+  }
+  return 0;
+#else
+#warning osmo_serial_set_custom_baudrate: unsupported platform
+  return -1;
+#endif
 }
 
 

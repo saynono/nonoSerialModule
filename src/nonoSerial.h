@@ -38,6 +38,11 @@ namespace nono
 			Serial();
 			int   openPort      (const char *device, const int baud) ;
 			void  closePort     () ;
+
+			int setBaudrate(int fd, speed_t baudrate);
+			int setCustomBaudrate(int fd, speed_t baudrate);
+			
+
 			void  flush     () ;
 			void  writeByte   (const unsigned char c) ;
 			int  writeString       (const char *s) ;
