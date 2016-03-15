@@ -52,6 +52,10 @@ https://developer.apple.com/library/mac/samplecode/SerialPortSample/Listings/Ser
 #include <IOKit/serial/ioss.h>
 #endif
 
+#ifdef __linux__
+#include <linux/serial.h>
+#endif
+
 // #endif
 
 
