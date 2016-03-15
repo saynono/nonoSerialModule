@@ -174,8 +174,10 @@ bool nonoSerialModule::sendDataToSplitter( Serial* serial, int splitterID, int p
 
 bool nonoSerialModule::testSendToSerial( unsigned char value ){
   Serial* serial = &serialDevices[0];
-  printf("-------------- TEST DATA FOR SERIAL (%s) -------------- ", serial->getDeviceName().c_str());
+  // printf("-------------- TEST DATA FOR SERIAL (%s) -------------- ", serial->getDeviceName().c_str());
   memset(dataBuffer,value,HGC_AMOUNT_LCDS_PER_COLUMN);
+  dataBuffer[0] = 0xff;
+  dataBuffer[1] = 0x00;
   return sendDataToSerial( serial, dataBuffer );
 }
 

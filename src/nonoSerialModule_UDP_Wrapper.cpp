@@ -301,7 +301,6 @@ void loop(){
       // if( !success ){
       //   printf("Serial: Couldn't send entire data set.");
       // }
-      int panel;
       int side;
 
       for( int i=0;i<HGC_AMOUNT_LCDS_TOTAL;i++ ){
