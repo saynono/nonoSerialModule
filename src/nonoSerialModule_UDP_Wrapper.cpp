@@ -305,7 +305,6 @@ void loop(){
 
       for( int i=0;i<HGC_AMOUNT_LCDS_TOTAL;i++ ){
         side = i / HGC_AMOUNT_LCDS_PER_COLUMN;
-        panel = (int)(i/30) % HGC_AMOUNT_PANELS_PER_COLUMN;
         dataBuffer[i] = side == (timeSomething%3) ? 0xff : 00;
         if( i == curLCD ) dataBuffer[i] = 0xff - val;
         // dataBuffer[i] = i == frameC ? 0xff : 0;
