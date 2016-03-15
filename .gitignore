@@ -39,5 +39,5 @@ data/core_object.dat
 */*/core_object.dat
 
 # binary data
-./bin/*
+bin/*
 
