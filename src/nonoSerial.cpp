@@ -41,13 +41,8 @@ https://developer.apple.com/library/mac/samplecode/SerialPortSample/Listings/Ser
 #include <errno.h>
 #include <sys/ioctl.h>
 
-// #ifndef TARGET_LINUX
 
-// new shit for Serial usb custom baudrates!
-/*
-#include <IOKit/usb/IOUSBLib.h>
-#include <IOKit/serial/IOSerialKeys.h>
-*/
+// new schtuff for custom baudrates!
 #ifdef __APPLE__
 #include <IOKit/serial/ioss.h>
 #endif
@@ -56,16 +51,13 @@ https://developer.apple.com/library/mac/samplecode/SerialPortSample/Listings/Ser
 #include <linux/serial.h>
 #endif
 
-// #endif
-
 
 
 
 #include "nonoSerial.h"
 
 // Hold the original termios attributes so we can reset them
-      static struct termios oldoptions;
-// #define B1000000 1000000
+static struct termios oldoptions;
 
 
 using namespace nono;
@@ -223,6 +215,9 @@ int Serial::openPort (const char *device, const int baud)
     int res = setCustomBaudrate(fd,baud);
     if( res == 0 ){
       myBaud = baud;
+      printf("SUCCESS: Altered baudrate to %i.",baud);
+    }else{
+      printf("ERROR: Couldn't set baudrate to custom value %i.",baud);
     }
 
   }
