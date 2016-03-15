@@ -319,7 +319,7 @@ void loop(){
     
 
 
-    serialModule.testSendToSerial( frameCnt%200 );
+    serialModule.testSendToSerial( frameCnt );
 
   }
 
