@@ -52,7 +52,7 @@ unsigned long lastUdpFrameReceived = 0;
 
 static uint64_t epochMilli;
 
-unsigned int frameDur = 1000 / 30;
+unsigned int frameDur = 1000 / 60;
 
 // unsigned int frameDur = 1000 / 2;
 unsigned long timeCur = 0;
