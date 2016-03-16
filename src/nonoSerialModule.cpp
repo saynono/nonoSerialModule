@@ -147,7 +147,7 @@ bool nonoSerialModule::testSendToSerial( int val ){
   dataBuffer[0] = 0xff;
   dataBuffer[1] = 0x00;
   float divider = ((sin(val/1000.0f)+1)/2.0) * 30.0 + 20.0;
-  divider = val/1000.0f;
+  divider = 20;//val/1000.0f;
   for( int i=2;i<l;i++ ){
     dataBuffer[i] = (int)(((sin((((i-2)%9)+val)/divider) + 1.0) / 2.0) * 230) & 0xff;
   }
