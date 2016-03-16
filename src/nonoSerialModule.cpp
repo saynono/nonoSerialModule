@@ -147,7 +147,7 @@ bool nonoSerialModule::testSendToSerial( int val ){
   dataBuffer[0] = 0xff;
   dataBuffer[1] = 0x00;
   for( int i=2;i<l;i++ ){
-    dataBuffer[i] = (int)(((sin(((i%10)+val)/10.0) + 1.0) / 2.0) * 230) & 0xff;
+    dataBuffer[i] = (int)(((sin(((i%10)+val)/3.0) + 1.0) / 2.0) * 230) & 0xff;
   }
 
   return sendDataToSerial( serial, dataBuffer, l );
