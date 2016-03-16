@@ -146,7 +146,7 @@ bool nonoSerialModule::testSendToSerial( int val ){
   memset(dataBuffer,0,l);
   dataBuffer[0] = 0xff;
   dataBuffer[1] = 0x00;
-  float divider = sin(val/100.0f) * 9.0 + 1;
+  float divider = sin(val/1000.0f) * 30.0 + 4.0;
   for( int i=2;i<l;i++ ){
     dataBuffer[i] = (int)(((sin(((i%10)+val)/divider) + 1.0) / 2.0) * 230) & 0xff;
   }
