@@ -16,7 +16,7 @@
 // #define HGC_SERIAL_BAUDRATE           115200
 
 // #define HGC_SERIAL_DEVICE_CNT         1
-#define SERIAL_DATA_BUFFER_SIZE       2048
+#define SERIAL_DATA_BUFFER_SIZE       512
 
 
 namespace nono
